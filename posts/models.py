@@ -61,3 +61,7 @@ class Post(models.Model):
         
     def __str__(self):
         return '{0} post with ID {1}'.format(self.for_recipient, self.id)
+    
+    @property
+    def post_quality(self):
+        return (self.likes_count + self.reposts_count * 2 + self.comments_count * 2) / self.subs_amount
