@@ -1,4 +1,4 @@
-# Content thief app
+# Content borrower app
 An ap which can get posts of given public groups In VK daily, pick best by likes and comments and repost to a given group via VK API and to Telegram channel. 
 
 
