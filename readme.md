@@ -5,3 +5,4 @@ An ap which can get posts of given public groups In VK daily, pick best by likes
 - [ ] Create scheduled task to get and store posts for all recipients
 - [ ] Add posting to a group logic to scheduled task 
 - [ ] Learn Telegram API and create a bot to post imgs to a channel
+- [ ] Update number of subs of donor group
