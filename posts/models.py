@@ -11,7 +11,8 @@ class Donor(models.Model):
     group_name = models.TextField()
     group_id = models.TextField(blank=True, null=True)
     group_domain = models.TextField(blank=True, null=True)
-    vk_link = models.TextField(null=True, blank=True)
+    vk_link = models.URLField(null=True, blank=True)
+    subs_amount = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.group_name
@@ -21,7 +22,7 @@ class Donor(models.Model):
         
     def getAndWritePosts(self, recipient):
         posts = wallGet.getPosts(self.group_domain)
-        wallGet.storePosts(posts, recipient)
+        wallGet.storePosts(posts, recipient, self.group_name, self.subs_amount)
 
     
 class Recipient(models.Model):
@@ -35,7 +36,6 @@ class Recipient(models.Model):
         return self.name
     
     def writeAll(self):
-        # Problem is that self is not queryset object - it does not have .all
         donors = self.donors.filter()
         for donor in donors:
             donor.getAndWritePosts(self.id)
@@ -50,6 +50,9 @@ class Post(models.Model):
     comments_count = models.IntegerField(blank=True, null=True)
     img_links = ArrayField(ArrayField(models.URLField(blank=True, null=True)))
     for_recipient = models.ForeignKey(Recipient, on_delete = models.CASCADE)
+    from_donor = models.TextField(blank=True, null=True)
+    subs_amount = models.IntegerField(null=True, blank=True)
+    
     
 
     class Meta:
