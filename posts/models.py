@@ -2,6 +2,8 @@ from django.db import models
 from .utils import wallGet
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
+import datetime
+from django.utils import timezone
 
 # Create your models here.
 
@@ -39,6 +41,16 @@ class Recipient(models.Model):
         donors = self.donors.filter()
         for donor in donors:
             donor.getAndWritePosts(self.id)
+
+    def makePostsList(self):
+        # Part of post selection logic is here
+        
+        # Get posts only from yesterday. Modify days=x to change amount of days
+        postList = Post.objects.filter(for_recipient=self.id, posted_at=timezone.now()-timezone.timedelta(days=1)).order_by('id')
+        
+        # sort by post_quality, take best half of posts
+        postList = sorted(postList, key=lambda x: x.post_quality, reverse=True)[:len(postList) // 2]
+        return postList
             
     
     
@@ -52,8 +64,7 @@ class Post(models.Model):
     for_recipient = models.ForeignKey(Recipient, on_delete = models.CASCADE)
     from_donor = models.TextField(blank=True, null=True)
     subs_amount = models.IntegerField(null=True, blank=True)
-    
-    
+     
 
     class Meta:
         db_table = 'post'
@@ -65,3 +76,4 @@ class Post(models.Model):
     @property
     def post_quality(self):
         return (self.likes_count + self.reposts_count * 2 + self.comments_count * 2) / self.subs_amount
+    
