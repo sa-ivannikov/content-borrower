@@ -28,16 +28,41 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# VK app
 APP_ID = config('APP_ID')
 APP_SERVICE_TOKEN = config('APP_SERVICE_TOKEN')
 APP_KEY = config('APP_KEY')
+
+# DB setup
 DB_NAME = config('DB_NAME')
 DB_USER = config('DB_USER')
 DB_PASSWORD = config('DB_PASSWORD')
 DB_HOST = config('DB_HOST')
 GROUP_ACESS_TOKEN = config('GROUP_ACESS_TOKEN')
-# Application definition
 
+# Caching setup
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "example"
+    }
+}
+# Cache time to live is 15 minutes.
+CACHE_TTL = 60 * 15
+
+
+
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
+]
+
+# Application definition
 INSTALLED_APPS = [
     'posts',
     'django.contrib.admin',
@@ -46,9 +71,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +83,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+]
+
+DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
 ]
 
 ROOT_URLCONF = 'GroupRunner.urls'
