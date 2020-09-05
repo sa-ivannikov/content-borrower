@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# VK app
+# VK retrieve posts app
 APP_ID = config('APP_ID')
 APP_SERVICE_TOKEN = config('APP_SERVICE_TOKEN')
 APP_KEY = config('APP_KEY')
@@ -51,16 +51,10 @@ CACHES = {
         "KEY_PREFIX": "example"
     }
 }
+
 # Cache time to live is 15 minutes.
 CACHE_TTL = 60 * 15
 
-# Celery setup
-BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Europe/Moscow'
 
 INTERNAL_IPS = [
     # ...
