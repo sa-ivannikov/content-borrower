@@ -14,17 +14,13 @@ app = Celery('GroupRunner',
                       'posts.tasks'],
              timezone='Europe/Moscow')
 
-
-@app.task
-def test(arg):
-    print(arg)
-
 app.conf.beat_schedule = {
     'Write posts to DB every 1 minute': {
         'task': 'posts.tasks.writePostsToDB',
-        'schedule':crontab(),
+        'schedule':crontab(minute=0, hour=1),
     }
 }
 
 if __name__ == "__main__":
     app.start()
+    

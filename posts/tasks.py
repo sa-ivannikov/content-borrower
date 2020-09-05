@@ -1,4 +1,4 @@
-from celery import shared_task, task 
+from celery import shared_task 
 from .services import storePosts
 
 @shared_task
