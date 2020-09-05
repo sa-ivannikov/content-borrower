@@ -1,6 +1,11 @@
+from __future__ import absolute_import
+import os
 from celery import Celery
 from celery.schedules import crontab
+from django.conf import settings
 
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'GroupRunner.settings')
 
 app = Celery('GroupRunner',
              broker='redis://localhost:6379',
@@ -15,10 +20,9 @@ def test(arg):
     print(arg)
 
 app.conf.beat_schedule = {
-    'Test every 2 secs': {
-        'task': 'GroupRunner.celery.test',
+    'Write posts to DB every 1 minute': {
+        'task': 'posts.tasks.writePostsToDB',
         'schedule':crontab(),
-        'args': ('hello',)
     }
 }
 
