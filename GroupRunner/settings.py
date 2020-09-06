@@ -26,7 +26,7 @@ SECRET_KEY = 'cdd_zbc5h#w6t$!a-&iyuh&64e5o=c@)#lw+9su&g&)%g7r9q-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
 # VK retrieve posts app
 APP_ID = config('APP_ID')
@@ -39,6 +39,7 @@ DB_USER = config('DB_USER')
 DB_PASSWORD = config('DB_PASSWORD')
 DB_HOST = config('DB_HOST')
 GROUP_ACESS_TOKEN = config('GROUP_ACESS_TOKEN')
+
 
 # Caching setup
 CACHES = {

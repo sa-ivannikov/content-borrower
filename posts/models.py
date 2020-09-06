@@ -4,6 +4,8 @@ from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 import datetime
 from django.utils import timezone
+from django_cryptography.fields import encrypt
+
 
 # Create your models here.
 
@@ -31,8 +33,10 @@ class Recipient(models.Model):
     id = models.AutoField(primary_key=True)
     name =  models.TextField()
     target_group_name = models.TextField()
+    target_group_id = models.CharField(max_length=30)
     target_group_link = models.TextField()
     donors = models.ManyToManyField(Donor)
+    group_key = encrypt(models.CharField(max_length=200))
     
     def __str__(self):
         return self.name
