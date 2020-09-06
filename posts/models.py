@@ -46,7 +46,7 @@ class Recipient(models.Model):
         # Part of post selection logic is here
         
         # Get posts only from yesterday. Modify days=x to change amount of days
-        postList = Post.objects.filter(for_recipient=self.id, posted_at=timezone.now()-timezone.timedelta(days=1)).order_by('id')
+        postList = Post.objects.filter(posted=False, for_recipient=self.id, posted_at__date=(timezone.now()-timezone.timedelta(days=1)).date())
         
         # sort by post_quality, take best half of posts
         postList = sorted(postList, key=lambda x: x.post_quality, reverse=True)[:len(postList) // 2]
@@ -64,6 +64,7 @@ class Post(models.Model):
     for_recipient = models.ForeignKey(Recipient, on_delete = models.CASCADE)
     from_donor = models.TextField(blank=True, null=True)
     subs_amount = models.IntegerField(null=True, blank=True)
+    posted = models.BooleanField(default=False)
      
 
     class Meta:

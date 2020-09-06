@@ -74,9 +74,9 @@ def storePosts(postsList, donorGroup, sourceGroup, sourceSubsAmount):
     for post in postsList:
         
         cursor.execute("""INSERT INTO public.post
-                        (posted_at, likes_count, reposts_count, comments_count, img_links, for_recipient_id, from_donor, subs_amount)
+                        (posted_at, likes_count, reposts_count, comments_count, img_links, for_recipient_id, from_donor, subs_amount, posted)
                         VALUES
-                       (%s, %s, %s, %s, %s, %s, %s, %s);""", (post['date'], post['likesAmount'], post['repostsAmount'], post['commentsAmount'], post['imgLinks'], donorGroup, sourceGroup, sourceSubsAmount))
+                       (%s, %s, %s, %s, %s, %s, %s, %s, %s);""", (post['date'], post['likesAmount'], post['repostsAmount'], post['commentsAmount'], post['imgLinks'], donorGroup, sourceGroup, sourceSubsAmount, False))
 
 
     conn.commit()
