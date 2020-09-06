@@ -3,7 +3,7 @@ from .services import storePosts
 
 @shared_task
 def test_task():
-    return "test"
+    print("test")
 
 @shared_task
 def writePostsToDB():

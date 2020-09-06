@@ -26,7 +26,7 @@ SECRET_KEY = 'cdd_zbc5h#w6t$!a-&iyuh&64e5o=c@)#lw+9su&g&)%g7r9q-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0']
 
 # VK retrieve posts app
 APP_ID = config('APP_ID')
