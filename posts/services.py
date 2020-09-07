@@ -1,21 +1,107 @@
-from .models import Post, Recipient, Donor
+import os
+from datetime import datetime
+import requests
 
 
-def storePosts():
+from django.conf import settings
+
+from .models import Recipient
+
+
+def store_posts():
+    """ Writes all posts from all
+    recipients to DB
+     """
     recipients = Recipient.objects.all()
     for recipient in recipients:
-        recipient.writeAll()
+        recipient.write_all()
 
-def post_to_group(post):
-    pass
+def download_post_photo(image_url):
+    # OK
+    """ Takes image_url and downloads it
+    to project folder. Returns file name. """
+    filename = image_url.rsplit('/', 1)[1]
+    res = requests.get(image_url, allow_redirects = True)
+    open(filename, 'wb').write(res.content)
+    return filename
+
+def get_upload_server(group_id, token):
+    """ Takes group ID, user token of the Recipient,
+    and returns Upload URL as a string,
+    which is required for upload_to_server """
+    upload_server_url = 'https://api.vk.com/method/photos.getWallUploadServer'
+    upload_server_payload = {
+        'group_id': group_id,
+        'access_token': token,
+        'v':'5.122',
+    }
+    upload_server = requests.get(upload_server_url, params=upload_server_payload)
+    return upload_server.json().get('response').get('upload_url')
+
+def upload_to_server(filename, upload_url):
+    """ Takes file name of the photo and upload server.
+    Photo must be stored in the project folder.
+    Uploads photo to server.
+    Returns VK API response, where photo
+    object is used from further saving.
+    Also removes file from project folder """
+    file_dict = {'photo': open(filename, 'rb')}
+    res = requests.post(upload_url, files=file_dict)
+    os.remove(filename)
+    return res
+
+def save_to_wall(upload_response, group_id, token):
+    """ Takes response from uploading file,
+    group ID and token.
+    Saves photo to group wall,
+    returns jsoned response from VK API """
+    api_url = 'https://api.vk.com/method/photos.saveWallPhoto'
+    payload = {
+        'group_id':group_id,
+        'photo': upload_response.json().get('photo'),
+        'server': upload_response.json().get('server'),
+        'hash': upload_response.json().get('hash'),
+        'access_token': token,
+        'v':'5.122',
+    }
+    res = requests.get(api_url, params=payload)
+    return res.json()
+
+def post_to_group(post, group_id, token):
+    """ Takes post, group_id and token.
+    Posts post's img to group with given id.
+    Auth with token """
+    # Take only 0th element, because img_links currently is a list of links. Would fix later
+    filename = download_post_photo(post.img_links[0])
+    upload_url = get_upload_server(group_id, token)
+    upload_response = upload_to_server(filename, upload_url)
+    save_response = save_to_wall(upload_response, group_id, token)
+    # VK API expects negative ID when posting to a group
+    group_id = '-' + group_id
+    attachment = 'photo' + str(save_response.get('response')[0].get('owner_id')) + '_' \
+        + str(save_response.get('response')[0].get('id'))
+    url = 'https://api.vk.com/method/wall.post'
+    payload = {
+        'owner_id':group_id,
+        'access_token':token,
+        'v':'5.122',
+        'friends_only':'0',
+        'from_group':'1',
+        'attachments':attachment,
+        }
+    result = requests.get(url, params=payload)
+    return result
 
 def repost_top_post():
+    """ For all recipients in DB,
+    post one best photo to tagret group.
+    Edit post to be no longer
+    available for make_post_list """
     recipients = Recipient.objects.all()
     for recipient in recipients:
-        posts = recipient.makePostsList()
+        posts = recipient.make_posts_list()
         if posts:
             best_post = posts[0]
-            #print(best_post)
-            post_to_group(best_post)
+            post_to_group(best_post, recipient.target_group_id, recipient.group_key).json()
             best_post.posted = True
             best_post.save()

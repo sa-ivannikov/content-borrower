@@ -20,13 +20,12 @@ class Donor(models.Model):
 
     def __str__(self):
         return self.group_name
-    
-    def showYesterdayPosts(self):
-        print(wallGet.getPosts(self.group_domain))
         
-    def getAndWritePosts(self, recipient):
-        posts = wallGet.getPosts(self.group_domain)
-        wallGet.storePosts(posts, recipient, self.group_name, self.subs_amount)
+    def get_and_write_posts(self, recipient):
+        """ Gets and writes all posts
+        from this donor to DB """
+        posts = wallGet.get_posts(self.group_domain)
+        wallGet.store_posts(posts, recipient, self.group_name, self.subs_amount)
 
     
 class Recipient(models.Model):
@@ -41,23 +40,21 @@ class Recipient(models.Model):
     def __str__(self):
         return self.name
     
-    def writeAll(self):
+    def write_all(self):
+        """  """
         donors = self.donors.filter()
         for donor in donors:
-            donor.getAndWritePosts(self.id)
+            donor.get_and_write_posts(self.id)
 
-    def makePostsList(self):
-        # Part of post selection logic is here
-        
+    def make_posts_list(self):
         # Get posts only from yesterday. Modify days=x to change amount of days
-        postList = Post.objects.filter(posted=False, for_recipient=self.id, posted_at__date=(timezone.now()-timezone.timedelta(days=1)).date())
-        
+        post_list = Post.objects.filter(posted=False, for_recipient=self.id, \
+            posted_at__date=(timezone.now()-timezone.timedelta(days=1)).date())
         # sort by post_quality, take best half of posts
-        postList = sorted(postList, key=lambda x: x.post_quality, reverse=True)[:len(postList) // 2]
-        return postList
-            
-    
-    
+        post_list = sorted(post_list, key=lambda x: x.post_quality, \
+            reverse=True)[:len(post_list) // 2]
+        return post_list
+             
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
     posted_at = models.DateTimeField()
@@ -69,16 +66,18 @@ class Post(models.Model):
     from_donor = models.TextField(blank=True, null=True)
     subs_amount = models.IntegerField(null=True, blank=True)
     posted = models.BooleanField(default=False)
-     
 
     class Meta:
         db_table = 'post'
-        #managed = False
         
     def __str__(self):
         return '{0} post with ID {1}'.format(self.for_recipient, self.id)
-    
+        
     @property
     def post_quality(self):
-        return (self.likes_count + self.reposts_count * 2 + self.comments_count * 2) / self.subs_amount
+        """ Measures post by qualiry,
+        using likes, reposts and comments
+        amount """
+        return (self.likes_count + self.reposts_count * 2 + self.comments_count * 2)\
+            / self.subs_amount
     
