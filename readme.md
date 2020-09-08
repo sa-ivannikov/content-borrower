@@ -1,8 +1,11 @@
 # Content borrower app
-An ap which can get posts of given public groups In VK daily, pick best by likes and comments and repost to a given group via VK API and to Telegram channel. 
+Configure donors (groups to borrow posts), recipients (ggroups to post content to). App takes posts from yesterday daily, stores them to DB, and reposts best selection to recipient with configured schedule. 
 
+
+## To do
 - [x] Create a logic to pick best pics from a given selection
 - [x] Create scheduled task to get and store posts for all recipients
 - [x] Add posting to a group logic to scheduled task 
-- [ ] Learn Telegram API and create a bot to post imgs to a channel
-- [ ] Update number of subs in all donors
+- [ ] Learn Telegram API and create a bot to post imgs to a channel - 11.09
+- [ ] Update number of subs in all donors - 12.09
+- [ ] Refactor code - 12.09
