@@ -92,6 +92,23 @@ def post_to_group(post, group_id, token):
     result = requests.get(url, params=payload)
     return result
 
+def tg_get_request(token, method_name, payload={}):
+    """ Makes get request to Telegram API.
+     """
+    url = 'https://api.telegram.org/bot{0}/{1}'.format(token, method_name)
+    res = requests.get(url, params=payload)
+    return res
+
+def tg_send_photo(token, chat_id, photo_url):
+    """ Sends photo to given chat
+     """
+    payload = {
+        'chat_id': chat_id,
+        'photo': photo_url,
+    }
+    res = tg_get_request(token, 'sendPhoto', payload=payload)
+    return res
+
 def repost_top_post():
     """ For all recipients in DB,
     post one best photo to tagret group.
@@ -103,5 +120,7 @@ def repost_top_post():
         if posts:
             best_post = posts[0]
             post_to_group(best_post, recipient.target_group_id, recipient.group_key).json()
+            if recipient.tg_channel and recipient.tg_token:
+                res = tg_send_photo(recipient.tg_token, recipient.tg_channel, best_post.img_links[0])
             best_post.posted = True
             best_post.save()
