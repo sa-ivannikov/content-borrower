@@ -5,9 +5,9 @@ from celery.schedules import crontab
 from django.conf import settings
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'GroupRunner.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'borrower.settings')
 
-app = Celery('GroupRunner',
+app = Celery('borrower',
              broker='redis://redis:6379',
              backend='redis://redis:6379',
              include=['posts.tasks'],
@@ -20,8 +20,7 @@ app.conf.beat_schedule = {
     },
     'Repost every 30 mins from 9 AM to 9 PM': {
         'task': 'posts.tasks.repost',
-        'schedule': crontab(minute='*/5')
-        #'schedule': crontab(minute='*/30', hour='9-21')
+        'schedule': crontab(minute='*/30', hour='9-21')
     }
 }
 

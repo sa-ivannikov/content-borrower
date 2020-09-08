@@ -12,14 +12,14 @@ services:
     image: "redis:alpine"
   celery:
     build: .
-    command: celery -A GroupRunner worker -l info
+    command: celery -A borrower worker -l info
     volumes:
       - .:/code
     depends_on:
       - redis
   celery-beat:
     build: .
-    command: celery -A GroupRunner beat -l info
+    command: celery -A borrower beat -l info
     volumes:
       - .:/code
     depends_on:
