@@ -20,7 +20,6 @@ Configure donors (groups to borrow posts), recipients (ggroups to post content t
 - [x] Add posting to a group logic to scheduled task 
 - [ ] Learn Telegram API and create a bot to post imgs to a channel - 11.09
 - [ ] Update number of subs in all donors - 12.09
-<<<<<<< HEAD
 - [ ] Create dashboard view with stats and "Repost right now" button - 12.09
 - [ ] Write tests 13.09
 - [ ] Refactor and document code - 14.09
