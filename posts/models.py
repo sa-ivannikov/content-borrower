@@ -1,5 +1,5 @@
 from django.db import models
-from .utils import wallGet
+from .utils import store_from_vk
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 import datetime
@@ -24,8 +24,8 @@ class Donor(models.Model):
     def get_and_write_posts(self, recipient):
         """ Gets and writes all posts
         from this donor to DB """
-        posts = wallGet.get_posts(self.group_domain)
-        wallGet.store_posts(posts, recipient, self.group_name, self.subs_amount)
+        posts = store_from_vk.get_posts(self.group_domain)
+        store_from_vk.store_posts(posts, recipient, self.group_name, self.subs_amount)
 
     
 class Recipient(models.Model):
