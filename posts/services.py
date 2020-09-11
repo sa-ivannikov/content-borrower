@@ -110,6 +110,8 @@ def tg_send_photo(token, chat_id, photo_url):
     return res
 
 def repost_for_recipient(recipient):
+    """ For given recipient, repost best
+    post to VK and Tg(if tg info specified) """
     posts = recipient.make_posts_list()
     if posts:
         best_post = posts[0]
@@ -127,11 +129,4 @@ def repost_top_post():
     available for make_post_list """
     recipients = Recipient.objects.all()
     for recipient in recipients:
-        posts = recipient.make_posts_list()
-        if posts:
-            best_post = posts[0]
-            post_to_group(best_post, recipient.target_group_id, recipient.group_key).json()
-            if recipient.tg_channel and recipient.tg_token:
-                res = tg_send_photo(recipient.tg_token, recipient.tg_channel, best_post.img_links[0])
-            best_post.posted = True
-            best_post.save()
+        repost_for_recipient(recipient)
