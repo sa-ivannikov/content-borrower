@@ -15,10 +15,10 @@
             </ul>
         </li>
         <form action="store/{{ recipient.id }}" method="post"> {% csrf_token %}
-            <input type="submit" name="store" value="Retrieve posts to DB!" />
+            <input type="submit" name="store" value="Retrieve posts to DB (SYNCHRONOUS!)" />
         </form>
         <form action="repost/{{ recipient.id }}" method="post"> {% csrf_token %}
-            <input type="submit" name="rep_now" value="Repost right now!" />
+            <input type="submit" name="rep_now" value="Repost right now! (ASYNCHRONOUS!)" />
         </form>
 
         {% endfor %}
