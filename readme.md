@@ -4,7 +4,7 @@ Configure donors (groups to borrow posts), recipients (groups to post content to
 
 ## Used technologies
 - Django
-- PostgeSQL, hosted on elephantsql
+- PostgeSQL
 - Django ORM
 - Psycopg for SQL queries
 - Celery for asyncronous tasks
