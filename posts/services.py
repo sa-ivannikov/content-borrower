@@ -109,6 +109,17 @@ def tg_send_photo(token, chat_id, photo_url):
     res = tg_get_request(token, 'sendPhoto', payload=payload)
     return res
 
+def repost_for_recipient(recipient):
+    posts = recipient.make_posts_list()
+    if posts:
+        best_post = posts[0]
+        post_to_group(best_post, recipient.target_group_id, recipient.group_key).json()
+        if recipient.tg_channel and recipient.tg_token:
+            res = tg_send_photo(recipient.tg_token, recipient.tg_channel, best_post.img_links[0])
+        best_post.posted = True
+        best_post.save()
+
+
 def repost_top_post():
     """ For all recipients in DB,
     post one best photo to tagret group.

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts</title>
+</head>
+<body>
+    <h1>Reposter app here.</h1>
+    <h2>Active Recipients:</h2>
+    <ul>
+        {% for recipient in recipients %}
+        <li><strong>{{ recipient }}</strong> with donors:
+            <ul>{% for donor in recipient.donors.all %} <li>{{ donor}}</li>  {% endfor %}
+            </ul>
+        </li>
+        <form action="store/{{ recipient.id }}" method="post"> {% csrf_token %}
+            <input type="submit" name="store" value="Retrieve posts to DB!" />
+        </form>
+        <form action="repost/{{ recipient.id }}" method="post"> {% csrf_token %}
+            <input type="submit" name="rep_now" value="Repost right now!" />
+        </form>
+
+        {% endfor %}
+    </ul>
+</body>
+</html>
