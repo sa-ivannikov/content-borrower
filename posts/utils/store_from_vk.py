@@ -20,6 +20,9 @@ def process_response(response_obj):
         # If no attachments - go next, we dont need this post
         if not attachments:
             continue
+        # If more then one photo - skpi this post. Cant process such posts yet
+        if len(attachments) != 1:
+            continue
 
         # Create string which contains links to all photos of post
         string_of_links = []
