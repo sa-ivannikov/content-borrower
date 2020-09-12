@@ -1,27 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posts</title>
-</head>
-<body>
-    <h1>Reposter app here.</h1>
-    <h2>Active Recipients:</h2>
-    <ul>
+{% extends 'base.html' %}
+{% block content %}
+    <h2 class="test">Active Recipients:</h2>
+    <ul class="list-group">
         {% for recipient in recipients %}
-        <li><strong>{{ recipient }}</strong> with donors:
-            <ul>{% for donor in recipient.donors.all %} <li>{{ donor}}</li>  {% endfor %}
+        <li class="list-group-item"><strong>{{ recipient }}</strong> with donors:
+            <ul class="list-group">{% for donor in recipient.donors.all %} <li  class="list-group-item">{{ donor}}</li>  {% endfor %}
             </ul>
+        
+        <div class="recipient-btn-group">
+            <form action="store/{{ recipient.id }}" method="post"> {% csrf_token %}
+                <input type="submit" name="store" value="Retrieve posts to DB (SYNC!)" class="btn btn-outline-primary"/>
+            </form>
+            <form action="repost/{{ recipient.id }}" method="post"> {% csrf_token %}
+                <input type="submit" name="rep_now" value="Repost right now! (ASYNC!)" class="btn btn-outline-primary"/>
+            </form>
+            <form action="delete_posts/{{ recipient.id }}" method="post"> {% csrf_token %}
+                <input type="submit" name="delete_posts" value="Delete all posts from DB (ASYNC!)" class="btn btn-outline-primary"/>
+            </form>
+        </div>
         </li>
-        <form action="store/{{ recipient.id }}" method="post"> {% csrf_token %}
-            <input type="submit" name="store" value="Retrieve posts to DB (SYNCHRONOUS!)" />
-        </form>
-        <form action="repost/{{ recipient.id }}" method="post"> {% csrf_token %}
-            <input type="submit" name="rep_now" value="Repost right now! (ASYNCHRONOUS!)" />
-        </form>
 
         {% endfor %}
     </ul>
-</body>
-</html>
+{% endblock content %}

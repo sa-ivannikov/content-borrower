@@ -1,5 +1,5 @@
 from celery import shared_task
-from .services import store_posts, repost_top_post, repost_for_recipient
+from .services import store_posts, repost_top_post, repost_for_recipient, delete_recipients_post
 from .models import Recipient
 
 
@@ -23,3 +23,7 @@ def repost_for_rec(rec_id):
     recipient = Recipient.objects.get(id=rec_id)
     repost_for_recipient(recipient)
     print('Reposted a post for {0}'.format(recipient))
+
+@shared_task
+def delete_posts_of_recipient(rec_id):
+    delete_recipients_post(rec_id)

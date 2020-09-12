@@ -5,7 +5,7 @@ import requests
 
 from django.conf import settings
 
-from .models import Recipient
+from .models import Recipient, Post
 
 
 def store_posts():
@@ -120,7 +120,11 @@ def repost_for_recipient(recipient):
             res = tg_send_photo(recipient.tg_token, recipient.tg_channel, best_post.img_links[0])
         best_post.posted = True
         best_post.save()
-
+     
+def delete_recipients_post(rec_id):
+    """ Delete all posts of
+    recipient with given ID """
+    Post.objects.filter(for_recipient=rec_id).delete()
 
 def repost_top_post():
     """ For all recipients in DB,
