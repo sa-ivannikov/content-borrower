@@ -19,7 +19,7 @@ Configure donors (groups to borrow posts), recipients (groups to post content to
 - [x] Create scheduled task to get and store posts for all recipients
 - [x] Add posting to a group logic to scheduled task 
 - [x] Learn Telegram API and create a bot to post imgs to a channel - 11.09
-- [ ] Write tests 12.09
-- [ ] Create dashboard view with stats and "Repost right now" button - 12.09
-- [ ] Update number of subs in all donors - 13.09
-- [ ] Refactor and document code - 14.09
+- [x] Create dashboard view with stats and "Repost right now" button - 12.09
+- [ ] Write tests 14.09
+- [ ] Update number of subs in all donors - 14.09
+- [ ] Refactor and document code - 15.09
