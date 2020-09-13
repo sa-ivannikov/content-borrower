@@ -20,17 +20,17 @@
 
     <!--Navbar Starts Here-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-        <a class="navbar-brand" href="#">Posts control</a>
+        <a class="navbar-brand" href="{% url 'index' %}">Posts control</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
     
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-            <!-- <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
             <li class="nav-item active">
+                <a class="nav-link" href="{% url 'admin:index' %}">Admin <span class="sr-only">(current)</span></a>
+            </li>
+            <!-- <li class="nav-item active">
                 <a class="nav-link" href="#">CrmApp <span class="sr-only">(current)</span></a>
             </li> -->
             </ul>
@@ -45,7 +45,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <!-- <a class="dropdown-item" href="#">My Tasks</a>
                     <div class="dropdown-divider"></div> -->
-                    <a class="dropdown-item" href="#">Logout</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                 </div>
                 </li>
             </ul>
@@ -55,8 +55,8 @@
             </form> -->
             {% else %}
             
-            <a class="btn btn-outline-secondary" href="#">Login</a>
-            <a class="btn btn-primary ml-2 mr-2" href="#">Register</a>  
+            <a class="btn btn-outline-secondary" href="{% url 'login' %}">Login</a>
+            <a class="btn btn-primary ml-2 mr-2" href="{% url 'register' %}">Register</a>  
     
             {% endif %}
         </div>
@@ -65,6 +65,13 @@
   </head>
   <body>
       <div class="container">
+          {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{message.tags}}">
+            {{ message }}
+            </div>
+            {% endfor %}
+          {% endif %}
         {% block content %}
         {% endblock content %}
       </div>

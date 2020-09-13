@@ -10,6 +10,7 @@ cryptography==3.1
 Django==3.1
 django-appconf==1.0.4
 django-celery-results==1.2.1
+django-crispy-forms==1.9.2
 django-cryptography==1.0
 django-debug-toolbar==2.2
 django-denorm==1.0.0
