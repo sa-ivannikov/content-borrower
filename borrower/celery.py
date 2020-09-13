@@ -8,8 +8,8 @@ from django.conf import settings
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'borrower.settings')
 
 app = Celery('borrower',
-             broker='redis://redis:6379',
-             backend='redis://redis:6379',
+             broker=settings.REDIS_URL,
+             backend=settings.REDIS_URL,
              include=['posts.tasks'],
              timezone='Europe/Moscow')
 

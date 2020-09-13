@@ -46,12 +46,14 @@ DB_PASSWORD = config('DB_PASSWORD')
 DB_HOST = config('DB_HOST')
 GROUP_ACESS_TOKEN = config('GROUP_ACESS_TOKEN')
 
+# Redis url
+REDIS_URL = config('REDIS_URL')
 
 # Caching setup
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": REDIS_URL,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient"
         },
