@@ -1,5 +1,5 @@
 from django.db import models
-from .utils import store_from_vk
+from .posts_storage import get_posts, store_posts
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 import datetime
@@ -12,9 +12,9 @@ from django_cryptography.fields import encrypt
 
 class Donor(models.Model):
     id = models.AutoField(primary_key=True)
-    group_name = models.TextField()
-    group_id = models.TextField(blank=True, null=True)
-    group_domain = models.TextField(blank=True, null=True)
+    group_name = models.CharField(max_length=70)
+    group_id = models.CharField(blank=True, null=True, max_length=50)
+    group_domain = models.CharField(blank=True, null=True, max_length=50)
     vk_link = models.URLField(null=True, blank=True)
     subs_amount = models.IntegerField(null=True, blank=True)
 
@@ -24,15 +24,15 @@ class Donor(models.Model):
     def get_and_write_posts(self, recipient):
         """ Gets and writes all posts
         from this donor to DB """
-        posts = store_from_vk.get_posts(self.group_domain)
-        store_from_vk.store_posts(posts, recipient, self.group_name, self.subs_amount)
+        posts = get_posts(self.group_domain)
+        store_posts(posts, recipient, self.group_name, self.subs_amount)
 
 class Recipient(models.Model):
     id = models.AutoField(primary_key=True)
-    name =  models.TextField()
-    target_group_name = models.TextField()
+    name =  models.CharField(max_length=50)
+    target_group_name = models.CharField(max_length=70)
     target_group_id = models.CharField(max_length=30)
-    target_group_link = models.TextField()
+    target_group_link = models.CharField(max_length=100)
     donors = models.ManyToManyField(Donor)
     group_key = encrypt(models.CharField(max_length=200))
     tg_channel = models.CharField(max_length=40, blank=True, null=True)
@@ -69,7 +69,7 @@ class Post(models.Model):
     comments_count = models.IntegerField(blank=True, null=True)
     img_links = ArrayField(ArrayField(models.URLField(blank=True, null=True)))
     for_recipient = models.ForeignKey(Recipient, on_delete = models.CASCADE)
-    from_donor = models.TextField(blank=True, null=True)
+    from_donor = models.CharField(blank=True, null=True, max_length=100)
     subs_amount = models.IntegerField(null=True, blank=True)
     posted = models.BooleanField(default=False)
 

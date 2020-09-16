@@ -6,12 +6,15 @@ import requests
 from django.conf import settings
 
 from .models import Recipient, Post
+import logging
 
+logger = logging.getLogger(__name__)
 
 def store_posts():
     """ Writes all posts from all
     recipients to DB
      """
+    logger.error('test')
     recipients = Recipient.objects.all()
     for recipient in recipients:
         recipient.write_all()
