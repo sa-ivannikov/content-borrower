@@ -3,23 +3,7 @@ Configure donors (groups to borrow posts), recipients (groups to post content to
 
 
 ## Used technologies
-- Django
+- Django, Django ORM
 - PostgeSQL
-- Django ORM
-- Psycopg for SQL queries
 - Celery for asyncronous tasks
 - Celery beat for scheduled tasks
-- Redis as message broker and cache setup (caching views not implemented yet)
-- django_cryptography for VK API keys DB storage
-- Docker-compose for local development
-
-
-## To do
-- [x] Create a logic to pick best pics from a given selection
-- [x] Create scheduled task to get and store posts for all recipients
-- [x] Add posting to a group logic to scheduled task 
-- [x] Learn Telegram API and create a bot to post imgs to a channel - 11.09
-- [x] Create dashboard view with stats and "Repost right now" button - 12.09
-- [ ] Write tests 14.09
-- [ ] Update number of subs in all donors - 14.09
-- [ ] Refactor and document code - 15.09
